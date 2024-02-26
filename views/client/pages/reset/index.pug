@@ -1,0 +1,17 @@
+extends ../../layout/default.pug
+include ../../mixins/submit-button.pug
+block main  
+
+    .login-wrapper
+        .login-container 
+            .login-heading 
+                h1 Lấy lại mật khẩu
+
+            p.err-message #{error ? error : "Mã OTP đã được gửi tới gmail của bạn! Vui lòng đợi trong giây lát."}
+            form(class="form-reset" id="form-reset" method="POST" action="/auth/otp")
+                .login-input 
+                    input(type="text" placeholder="Vui lòng nhập mã OTP" name="otp" required)
+
+                .login-submit
+                    +submit-button("GỬI OTP","form-reset")
+

@@ -1,0 +1,12 @@
+node_modules/
+bower_components/
+venv/
+env/
+lib/
+lib64/
+
+*.log
+*.sqlite
+*.sqlite3
+*.db
+
