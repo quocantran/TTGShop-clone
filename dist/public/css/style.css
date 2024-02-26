@@ -901,7 +901,7 @@ html {
 }
 
 .product-action-inner:hover::before{
-    width: 80%;
+    width: 72%;
     background: #263b96;
 }
 
@@ -1546,6 +1546,10 @@ html {
 .collectionProduct-row .product-loop{
     width: 20%;
     margin: 16px 0;
+}
+
+.collectionProduct-row .product-inner{
+    width: 192px;
 }
 
 .collectionProduct-row .product-action-inner:hover::before{
