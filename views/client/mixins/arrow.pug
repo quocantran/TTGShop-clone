@@ -8,7 +8,7 @@ mixin arrow(target)
     script.
         document.addEventListener('DOMContentLoaded', function() {
             const countProduct = document.querySelector(".product-2-loop").querySelectorAll(".product-loop").length;
-            const widthCard = 256;
+            const widthCard = 268;
             const maxTranslate = (parseInt(countProduct) - 5) * -widthCard;
             const minTranslate = 0;
             const arrowButtons = document.querySelectorAll(".arrow-left, .arrow-right");
@@ -20,10 +20,10 @@ mixin arrow(target)
                     let translateX = parseInt(targetElement.style.transform.split("(")[1]) || 0;
 
                     if (button.classList.contains("arrow-left") && translateX < minTranslate) {
-                        translateX += Math.floor(257*2 / arrowButtons.length);
+                        translateX += Math.floor(widthCard*2 / arrowButtons.length);
                         targetElement.style.transform = `translateX(${translateX}px)`;
                     } else if (button.classList.contains("arrow-right") && translateX > maxTranslate) {
-                        translateX -= Math.floor(257*2 / arrowButtons.length);
+                        translateX -= Math.floor(widthCard*2 / arrowButtons.length);
                         targetElement.style.transform = `translateX(${translateX}px)`;
                     }
                 });
