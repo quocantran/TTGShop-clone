@@ -45,12 +45,16 @@ html {
 
 .main-container{
     margin-top: 126px;
-    
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1400px;
+
 }
 
 .inner-header{
     padding: 15px;
-    
+    max-width: 1400px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
 }
@@ -765,18 +769,13 @@ html {
     background-color: #f9bb01;
 
 }
-.product-loop{
-    width: 256.8px;
-}
-
-
 
 .product-inner{
     background-color: #fff;
-    padding: 0 10px;
+    padding: 0 8px;
     height: 432px;
-    width: 242px;
-    margin: 0 10px;
+    width: 252px;
+    margin: 0 8px;
 }
 
 .content-1-wrapper{
@@ -1543,9 +1542,6 @@ html {
     position: relative;
 }
 
-.collectionProduct-row .product-inner{
-    width: 184px;
-}
 
 .collectionProduct-row .product-loop{
     width: 20%;
