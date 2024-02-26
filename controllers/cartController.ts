@@ -62,7 +62,7 @@ export default {
 
   cartPage: async (req: Request, res: Response) => {
     const cart = await Cart.findOne({ _id: req.cookies.cart_id });
-    const quantityMap = {};
+    const quantityMap: any = {};
     cart.products.forEach((item) => {
       quantityMap[item.product_id] = item.quantity;
     });
