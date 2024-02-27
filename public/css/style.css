@@ -2389,3 +2389,9 @@ html {
         display: none;
     }
 }
+
+@media screen and (max-width : 1400px){
+    .product-inner{
+        width: 242px;
+    }
+}

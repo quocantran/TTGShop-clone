@@ -24,13 +24,13 @@ export default {
         deleted: false,
         sold_out: false,
         brand: "man-hinh-may-tinh",
-      });
+      }).limit(10);
 
       const vga = await Products.find({
         deleted: false,
         sold_out: false,
         brand: "vga",
-      });
+      }).limit(10);
 
       const newProduct = convertImage(product);
       const newCpu = convertImage(cpu);
