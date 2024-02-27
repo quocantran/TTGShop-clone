@@ -33,12 +33,12 @@ exports.default = {
                 deleted: false,
                 sold_out: false,
                 brand: "man-hinh-may-tinh",
-            });
+            }).limit(10);
             const vga = yield products_model_1.default.find({
                 deleted: false,
                 sold_out: false,
                 brand: "vga",
-            });
+            }).limit(10);
             const newProduct = (0, convertImage_1.default)(product);
             const newCpu = (0, convertImage_1.default)(cpu);
             const newScreen = (0, convertImage_1.default)(screen);
