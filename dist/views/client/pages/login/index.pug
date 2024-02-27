@@ -1,0 +1,40 @@
+extends ../../layout/default.pug
+include ../../mixins/submit-button.pug
+include ../../mixins/toast.pug
+block main  
+    if messages.success
+        +toast(messages.success)
+
+    .login-wrapper 
+        .login-container 
+            .login-heading 
+                h4(class="active login-title")
+                    a(href="/login") Đăng nhập   
+                h4 
+                    a(href="/register") Đăng Ký
+            .login-content 
+                p.err-message #{error}
+                form(class="form-login" id="form-login" method="POST" action="/auth/login" style= showLoginForm==false ? "display : none" : "display : block")
+                    .login-input 
+                        input(type="email" placeholder="Vui lòng nhập email của bạn" name="email" required)
+                    .login-input 
+                        input(type="password" class="form-password" placeholder="Vui lòng nhập mật khẩu" name="password" required)
+                    p.re-captcha This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.
+
+                    .login-submit
+                        +submit-button("Đăng nhập","form-login")
+                        p Bạn quên mật khẩu? 
+                            span.form-navigate Quên mật khẩu?
+
+                form(class="form-forgot" id="form-forgot" method="POST" action="/auth/forgot" style= showLoginForm==false ? "display : block" : "display : none")
+                    .login-input 
+                        input(type="email" placeholder="Vui lòng nhập email của bạn" name="email" required)
+
+                    p.re-captcha This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.
+
+                    .login-submit
+                        +submit-button("GỬI EMAIL","form-forgot")
+
+                        p Quay lại 
+                            span.form-back đăng nhập
+

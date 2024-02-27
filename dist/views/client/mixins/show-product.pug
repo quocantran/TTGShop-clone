@@ -1,0 +1,15 @@
+include ./arrow.pug
+include ./card.pug
+include ./link.pug
+
+mixin show-product(data,title,href,className)
+    .home-collection-2 
+    .content-2 
+        .content-2-heading 
+            p #{title}
+            +arrow(className)
+        .product-2-container    
+            div(class=`product-2-loop ${className}`) 
+                each item of data
+                    +card(item)
+            +link(title,href)

@@ -1,0 +1,26 @@
+extends ../../layout/default.pug 
+
+block main 
+    .account-wrapper 
+        .account-container 
+            .account-header
+                h1 Tài khoản của bạn
+            .account-inner
+                .account-left 
+                    .accountSidebar-header 
+                        h3.title-sidebar Tài khoản
+                    .accountSidebar-content 
+                        ul
+                            li
+                                a(href="/account") Thông tin tài khoản
+                            
+                            li
+                                a(class="log-out") Đăng xuất
+                .account-right 
+                    .accountRight-header 
+                        p.title-detail Thông tin tài khoản
+                        p.user-fullname #{user.username}
+                        p.user-email #{user.email}
+                        .user-address 
+                            p #{user.address}
+                            span(class="view-address") Xem địa chỉ
