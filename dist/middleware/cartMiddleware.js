@@ -14,19 +14,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const cart_model_1 = __importDefault(require("../models/cart.model"));
 const cartId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const cartId = req.cookies.cart_id;
-    if (!cartId) {
-        const cart = new cart_model_1.default();
-        const expiresTime = 1000 * 60 * 60 * 24 * 365;
-        res.cookie("cart_id", cart._id, {
-            expires: new Date(Date.now() + expiresTime)
-        });
-        yield cart.save();
+    try {
+        const cartId = req.cookies.cart_id;
+        if (!cartId) {
+            const cart = new cart_model_1.default();
+            const expiresTime = 1000 * 60 * 60 * 24 * 365;
+            res.cookie("cart_id", cart._id, {
+                expires: new Date(Date.now() + expiresTime),
+            });
+            yield cart.save();
+        }
+        else {
+            const cart = yield cart_model_1.default.findOne({ _id: req.cookies.cart_id });
+            const quantity = cart.products.reduce((init, item) => init + item.quantity, 0);
+            req.app.locals.quantityCart = quantity;
+        }
     }
-    else {
-        const cart = yield cart_model_1.default.findOne({ _id: req.cookies.cart_id });
-        const quantity = cart.products.reduce((init, item) => init + item.quantity, 0);
-        req.app.locals.quantityCart = quantity;
+    catch (err) {
+        console.log(err);
+        next();
     }
     next();
 });
