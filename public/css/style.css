@@ -2394,4 +2394,8 @@ html {
     .product-inner{
         width: 242px;
     }
+
+    .collectionProduct-row .product-inner{
+        width: 185px;
+    }
 }
