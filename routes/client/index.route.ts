@@ -7,8 +7,10 @@ import accountRouter from "./account.route";
 import cartId from "../../middleware/cartMiddleware";
 import cartRouter from "./cart.route";
 import { Request, Response, NextFunction } from "express";
+import checkDevice from "../../middleware/checkdeviceMiddleware";
 
 export default function routes(app: Express) {
+  app.use(checkDevice);
   app.use(cartId);
   app.use("/", homeRouter);
   app.use("/", productRouter);
