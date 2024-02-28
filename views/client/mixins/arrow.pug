@@ -10,7 +10,7 @@ mixin arrow(target)
             const countProduct = document.querySelector(".product-2-loop").querySelectorAll(".product-loop").length;
             const card = document.querySelectorAll(".product-loop")[0];
             const widthCard = Math.floor(card.clientWidth);
-            console.log(widthCard)
+
             const maxTranslate = (parseInt(countProduct) - 5) * -widthCard;
             const minTranslate = 0;
             const arrowButtons = document.querySelectorAll(".arrow-left, .arrow-right");
