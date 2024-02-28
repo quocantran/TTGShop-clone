@@ -10,7 +10,9 @@ const collections_route_1 = __importDefault(require("./collections.route"));
 const account_route_1 = __importDefault(require("./account.route"));
 const cartMiddleware_1 = __importDefault(require("../../middleware/cartMiddleware"));
 const cart_route_1 = __importDefault(require("./cart.route"));
+const checkdeviceMiddleware_1 = __importDefault(require("../../middleware/checkdeviceMiddleware"));
 function routes(app) {
+    app.use(checkdeviceMiddleware_1.default);
     app.use(cartMiddleware_1.default);
     app.use("/", home_route_1.default);
     app.use("/", products_route_1.default);
