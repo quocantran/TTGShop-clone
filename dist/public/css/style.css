@@ -1503,7 +1503,7 @@ html {
 }
 
 .collectionProduct-row .product-action-inner:hover::before {
-  width: 107%;
+  width: 100%;
 }
 
 .collectionProduct-row .product-inner {
