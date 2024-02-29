@@ -47,14 +47,14 @@ block main
         const brand = parts[parts.length-1];
         const collectionRow = document.querySelector(".collectionProduct-row");
         const loadMore = document.querySelector(".more-product");
-        console.log(loadMore)
+       
         document.querySelector('.loadmore-btn').addEventListener('click', (e) => {
             e.preventDefault();
             loadMore.classList.add("show");
-            console.log(123);
+           
             fetch(`/api/products?skip=${skip}&brand=${brand}`)
                 .then(response => response.json())
-                .then(data => {
+                    .then(data => {
 
 
                     data.forEach(product => {

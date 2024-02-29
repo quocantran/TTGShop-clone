@@ -61,41 +61,47 @@ export default {
   },
 
   cartPage: async (req: Request, res: Response) => {
-    const cart = await Cart.findOne({ _id: req.cookies.cart_id });
-    const quantityMap: any = {};
-    cart.products.forEach((item) => {
-      quantityMap[item.product_id] = item.quantity;
-    });
-    const product_id = cart.products.map((item) => item.product_id);
-    const product = await Products.find({
-      _id: {
-        $in: product_id,
-      },
-    });
+    try{
+      const cart = await Cart.findOne({ _id: req.cookies.cart_id });
+      const quantityMap: any = {};
+      cart.products.forEach((item) => {
+        quantityMap[item.product_id] = item.quantity;
+      });
+      const product_id = cart.products.map((item) => item.product_id);
+      const product = await Products.find({
+        _id: {
+          $in: product_id,
+        },
+      });
 
-    for (const item of product) {
-      item.image_url = item.image_url.replace("small", "medium");
-      const productIdString = item._id.toString();
-      if (quantityMap.hasOwnProperty(productIdString)) {
-        item.quantity = quantityMap[productIdString];
+      for (const item of product) {
+        item.image_url = item.image_url.replace("small", "medium");
+        const productIdString = item._id.toString();
+        if (quantityMap.hasOwnProperty(productIdString)) {
+          item.quantity = quantityMap[productIdString];
+        }
+        const price = item.price.replace(/,/g, "").replace("₫", "");
+        const qty = item.quantity as number;
+        item.totalPrice = parseFloat(price) * qty;
       }
-      const price = item.price.replace(/,/g, "").replace("₫", "");
-      const qty = item.quantity as number;
-      item.totalPrice = parseFloat(price) * qty;
+
+      let totalPrice = product.reduce((init, item) => {
+        const price = item.totalPrice as number;
+        return price + init;
+      }, 0);
+      let convertPrice: string = convertMoney(totalPrice);
+
+      convertPrice = convertPrice.replace(/\./g, ",");
+      res.render("client/pages/cart/index.pug", {
+        totalPrice: convertPrice,
+        priceInteger: totalPrice,
+        product: product,
+      });
     }
-
-    let totalPrice = product.reduce((init, item) => {
-      const price = item.totalPrice as number;
-      return price + init;
-    }, 0);
-    let convertPrice: string = convertMoney(totalPrice);
-
-    convertPrice = convertPrice.replace(/\./g, ",");
-    res.render("client/pages/cart/index.pug", {
-      totalPrice: convertPrice,
-      priceInteger: totalPrice,
-      product: product,
-    });
+    catch(err){
+      res.redirect("/");
+    }
+    
   },
 
   removeProduct: async (req: Request, res: Response) => {

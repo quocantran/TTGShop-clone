@@ -64,38 +64,43 @@ exports.default = {
         }
     }),
     cartPage: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const cart = yield cart_model_1.default.findOne({ _id: req.cookies.cart_id });
-        const quantityMap = {};
-        cart.products.forEach((item) => {
-            quantityMap[item.product_id] = item.quantity;
-        });
-        const product_id = cart.products.map((item) => item.product_id);
-        const product = yield products_model_1.default.find({
-            _id: {
-                $in: product_id,
-            },
-        });
-        for (const item of product) {
-            item.image_url = item.image_url.replace("small", "medium");
-            const productIdString = item._id.toString();
-            if (quantityMap.hasOwnProperty(productIdString)) {
-                item.quantity = quantityMap[productIdString];
+        try {
+            const cart = yield cart_model_1.default.findOne({ _id: req.cookies.cart_id });
+            const quantityMap = {};
+            cart.products.forEach((item) => {
+                quantityMap[item.product_id] = item.quantity;
+            });
+            const product_id = cart.products.map((item) => item.product_id);
+            const product = yield products_model_1.default.find({
+                _id: {
+                    $in: product_id,
+                },
+            });
+            for (const item of product) {
+                item.image_url = item.image_url.replace("small", "medium");
+                const productIdString = item._id.toString();
+                if (quantityMap.hasOwnProperty(productIdString)) {
+                    item.quantity = quantityMap[productIdString];
+                }
+                const price = item.price.replace(/,/g, "").replace("₫", "");
+                const qty = item.quantity;
+                item.totalPrice = parseFloat(price) * qty;
             }
-            const price = item.price.replace(/,/g, "").replace("₫", "");
-            const qty = item.quantity;
-            item.totalPrice = parseFloat(price) * qty;
+            let totalPrice = product.reduce((init, item) => {
+                const price = item.totalPrice;
+                return price + init;
+            }, 0);
+            let convertPrice = (0, convertMoney_1.default)(totalPrice);
+            convertPrice = convertPrice.replace(/\./g, ",");
+            res.render("client/pages/cart/index.pug", {
+                totalPrice: convertPrice,
+                priceInteger: totalPrice,
+                product: product,
+            });
         }
-        let totalPrice = product.reduce((init, item) => {
-            const price = item.totalPrice;
-            return price + init;
-        }, 0);
-        let convertPrice = (0, convertMoney_1.default)(totalPrice);
-        convertPrice = convertPrice.replace(/\./g, ",");
-        res.render("client/pages/cart/index.pug", {
-            totalPrice: convertPrice,
-            priceInteger: totalPrice,
-            product: product,
-        });
+        catch (err) {
+            res.redirect("/");
+        }
     }),
     removeProduct: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const id = req.params.id;
