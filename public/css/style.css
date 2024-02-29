@@ -2418,3 +2418,9 @@ html {
         width: 185px;
     }
 }
+
+@media  screen and(min-width : 1400px) {
+   .collectionProduct-row .product-inner{
+    width: 192px;
+   } 
+}
