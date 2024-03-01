@@ -3,6 +3,8 @@ mixin card(data)
         .product-inner
             a(href=`/products/${data.slug}` class="product-image" data-title=data.title data-image=data.image_url)  
                 img(src=data.image_url alt="image" srcset="")
+                span(class="show-product" data-id=data._id)
+                    <i class="fa-solid fa-eye"></i>
             .product-info 
                 .product-title #{data.title}
                 .product-price 

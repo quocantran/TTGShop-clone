@@ -10,5 +10,6 @@ router.get("/products/:id", productController_1.default.index);
 router.get("/search", productController_1.default.search);
 router.get("/api/products", productController_1.default.loadMoreProduct);
 router.post("/api/suggest-product", productController_1.default.suggestProduct);
+router.get("/api/product/:id", productController_1.default.getProduct);
 exports.default = router;
 //# sourceMappingURL=products.route.js.map

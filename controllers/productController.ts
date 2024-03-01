@@ -92,4 +92,12 @@ export default {
       totalPage: totalPage,
     });
   },
+  getProduct : async(req : Request, res : Response) => {
+    const id = req.params.id
+    const product = await Products.findOne({
+      _id: id
+    })
+    product.image_url = product.image_url.replace("small","master");
+    res.json(product);
+  }
 };

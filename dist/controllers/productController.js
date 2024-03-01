@@ -97,5 +97,13 @@ exports.default = {
             totalPage: totalPage,
         });
     }),
+    getProduct: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const id = req.params.id;
+        const product = yield products_model_1.default.findOne({
+            _id: id
+        });
+        product.image_url = product.image_url.replace("small", "master");
+        res.json(product);
+    })
 };
 //# sourceMappingURL=productController.js.map

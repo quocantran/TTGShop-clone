@@ -1,6 +1,6 @@
-const quantityInput = document.querySelector("#quantity");
-const plusBtn = document.querySelector(".plus");
-const minusBtn = document.querySelector(".minus");
+const quantityInput = document.querySelector(".quantity");
+const plusBtn = document.querySelectorAll(".plus");
+const minusBtn = document.querySelectorAll(".minus");
 const modalLive = document.querySelector(".modalLive-wrapper");
 const closeLive = document.querySelector(".close-live");
 const openLive = document.querySelector(".review-container");
@@ -18,6 +18,9 @@ const logoutBtn = document.querySelectorAll(".log-out");
 const addToCart = document.querySelector("#add-to-cart");
 const searchInp = document.querySelector(".search-input");
 const totalPriceProduct = document.querySelectorAll(".total-price-product");
+const showProduct = document.querySelectorAll(".show-product");
+const productInfo = document.querySelector(".productInfo-inner");
+const productWrapper = document.querySelector(".product-info-wrapper");
 
 const Max_Quantity = 10;
 const Min_Quantity = 1;
@@ -47,17 +50,22 @@ if (headerUsername) {
 }
 
 if (quantityInput) {
-  plusBtn.addEventListener("click", () => {
-    let valueInp = quantityInput.getAttribute("value");
-    if (valueInp < Max_Quantity) valueInp++;
-    quantityInput.setAttribute("value", valueInp);
-  });
+  plusBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      console.log(1);
+      let valueInp = quantityInput.getAttribute("value");
+      if (valueInp < Max_Quantity) valueInp++;
+      quantityInput.setAttribute("value", valueInp);
+    });
+  })
 
-  minusBtn.addEventListener("click", () => {
-    let valueInp = quantityInput.getAttribute("value");
-    if (valueInp > Min_Quantity) valueInp--;
-    quantityInput.setAttribute("value", valueInp);
-  });
+  minusBtn.forEach(btn => {
+    btn.addEventListener("click", () => {
+      let valueInp = quantityInput.getAttribute("value");
+      if (valueInp > Min_Quantity) valueInp--;
+      quantityInput.setAttribute("value", valueInp);
+    });
+  })
 }
 
 openLive.addEventListener("click", () => {
@@ -98,8 +106,8 @@ if (logoutBtn) {
 
 if (addToCart) {
   addToCart.addEventListener("click", function () {
-    const quantity = document.getElementById("quantity").value;
-
+    const quantity = document.querySelector(".quantity").value;
+    console.log(123);
     const form = document.querySelector(".productDetail-actions");
     const action = form.getAttribute("action");
     form.setAttribute("action", `${action}?quantity=${quantity}`);
@@ -191,3 +199,79 @@ if (searchInp) {
     }, 800);
   });
 }
+
+if(showProduct){
+  
+  showProduct.forEach(item => {
+    item.addEventListener("click",async(e) => {
+      e.preventDefault();
+      const id = item.getAttribute("data-id");
+      
+      const data = await fetch(`/api/product/${id}`);
+      const product = await data.json();
+      
+      const html = `
+              <div class="productInfo-thumb">
+                <img src= ${product.image_url} alt="" srcset="">
+              </div>
+              <div class="productDetail-content">
+                <div class="productDetail-header">
+                  <h1>${product.title}</h1>
+                  <span class="product-soldout">Tình trạng :</span>
+                  <p class="${product.sold_out ? "sold-out" : "stocking"}">${product.sold_out ? "Hết hàng" : "Còn hàng"}</p>
+                </div>
+                <div class="productDetail-inner">
+                  <div class="productInner-wrapper">
+                    <div class="productDetail-price">
+                      <span>Giá:</span>
+                      <p>${product.price}</p>
+                      <div class="${product.discount === "" ? "" : "productDetail-discount"}">
+                        <h3>${product.discount === "" ? "" : product.discount}</h3>
+                      </div>
+                    </div>
+                    <form action="/add-to-cart/${product._id}" method="post" class="productDetail-actions">
+                      <div class="addcart-area">
+                        <div class="buy-now">
+                          <form action="/add-to-cart/${product._id}" method="POST" class="add-form">
+                            <input name="cart" hidden>
+                            <button type="submit">mua ngay</button>
+                          </form>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="productInfo-close">
+                <i class="fa-solid fa-xmark"></i>
+              </div>
+      `;
+        productInfo.innerHTML = html;
+        productWrapper.style.position = "fixed";
+        productWrapper.style.opacity = "1";
+        const closeModal = document.querySelector(".productInfo-close");
+        if(closeModal){
+          
+          console.log(1);
+          closeModal.addEventListener("click",() => {
+            productWrapper.style.position = "relative";
+            productWrapper.style.opacity = "0";
+          })
+        
+          
+        }
+    })
+  })
+}
+
+if(productWrapper){
+  productWrapper.addEventListener("click",() => {
+    productWrapper.style.position = "relative";
+    productWrapper.style.opacity = "0";
+  })
+  productInfo.addEventListener("click", (e) => {
+    e.stopPropagation();
+  })
+}
+
+

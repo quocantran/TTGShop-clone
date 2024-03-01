@@ -2,6 +2,7 @@ extends ../../layout/default.pug
 include ../../mixins/show-product.pug
 include ../../mixins/product-heading.pug
 include ../../mixins/alertCart.pug
+
 block main
 
     if messages.addSuccess
@@ -29,13 +30,13 @@ block main
                                 span(class="quantity-btn minus")
                                     <i class="fa-solid fa-minus"></i>
 
-                                input(type="text" id="quantity" value="1" min="1" readonly name="quantity")
+                                input(type="text" class="quantity" value="1" min="1" readonly name="quantity")
 
                                 span(class="quantity-btn plus")
                                     <i class="fa-solid fa-plus"></i>
                         .addcart-area
                             button(id="add-to-cart") thêm vào giỏ
-                            div(id="buy-now")
+                            div(class="buy-now")
                                 form(action=`/add-to-cart/${product._id}`, method="POST" class="add-form")
                                     input(name="cart" hidden)  
                                     button(type="submit") mua ngay
