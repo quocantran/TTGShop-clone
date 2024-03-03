@@ -22,7 +22,6 @@ const cartId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             res.cookie("cart_id", cart._id, {
                 expires: new Date(Date.now() + expiresTime),
             });
-            console.log(cart._id);
             yield cart.save();
         }
         else {

@@ -11,8 +11,7 @@ const cartId = async (req: Request, res: Response, next: NextFunction) => {
       res.cookie("cart_id", cart._id, {
         expires: new Date(Date.now() + expiresTime),
       });
-      console.log(cart._id);
-      
+     
       await cart.save();
     } else {
       const cart = await Cart.findOne({ _id: req.cookies.cart_id });

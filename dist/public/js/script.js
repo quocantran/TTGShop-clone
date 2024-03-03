@@ -52,7 +52,6 @@ if (headerUsername) {
 if (quantityInput) {
   plusBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
-      console.log(1);
       let valueInp = quantityInput.getAttribute("value");
       if (valueInp < Max_Quantity) valueInp++;
       quantityInput.setAttribute("value", valueInp);
@@ -107,7 +106,7 @@ if (logoutBtn) {
 if (addToCart) {
   addToCart.addEventListener("click", function () {
     const quantity = document.querySelector(".quantity").value;
-    console.log(123);
+    
     const form = document.querySelector(".productDetail-actions");
     const action = form.getAttribute("action");
     form.setAttribute("action", `${action}?quantity=${quantity}`);
@@ -251,8 +250,7 @@ if(showProduct){
         productWrapper.style.opacity = "1";
         const closeModal = document.querySelector(".productInfo-close");
         if(closeModal){
-          
-          console.log(1);
+   
           closeModal.addEventListener("click",() => {
             productWrapper.style.position = "relative";
             productWrapper.style.opacity = "0";
