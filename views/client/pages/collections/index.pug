@@ -31,7 +31,7 @@ block main
                         .collectionProduct-heading
                             .collectionBox-left 
                                 h1 #{title}
-                                p.quantity-product #{quantity}
+                                p(class="quantity-product" data-qty=quantity) #{quantity}
                                     span sản phẩm
                         .collectionProduct-content 
                             .collectionProduct-row 
@@ -41,28 +41,29 @@ block main
                             form(action="" method="get" class="loadmore-btn")
                                 button(type="submit" class="more-product") Xem thêm sản phẩm
     script.
-        let skip = 10;
+        let skip = 10; // skip 10 products initially
         const url = window.location.href;
         const parts = url.split("/");
         const brand = parts[parts.length-1];
         const collectionRow = document.querySelector(".collectionProduct-row");
         const loadMore = document.querySelector(".more-product");
-       
+
         document.querySelector('.loadmore-btn').addEventListener('click', (e) => {
             e.preventDefault();
             loadMore.classList.add("show");
-           
+
             fetch(`/api/products?skip=${skip}&brand=${brand}`)
                 .then(response => response.json())
                     .then(data => {
-
-
                     data.forEach(product => {
                         const productElement = `
                         <div class="product-loop">
                             <div class="product-inner">
                                 <a href="/products/${product.slug}" class="product-image">
                                     <img src="${product.image_url}" alt="image" srcset="">
+                                    <span class="show-product" data-id=${product._id}>
+                                        <i class="fa-solid fa-eye"></i>
+                                    </span>
                                 </a>
                                 <div class="product-info">
                                     <div class="product-title">${product.title}</div>
@@ -89,8 +90,76 @@ block main
                         `;
                         collectionRow.insertAdjacentHTML('beforeend', productElement);
                     });
-                    skip += 10; // Tăng giá trị skip để lấy 10 sản phẩm tiếp theo trong db
+                    skip += 10; // Increase the skip value to get the next 10 products in the db
                     loadMore.classList.remove("show");
+                    // Adđ event click to show quick view modal
+                    const showProduct = document.querySelectorAll('.show-product');
+                    if(showProduct){
+                        console.log(showProduct);
+                        showProduct.forEach(item => {
+                            item.addEventListener("click",async(e) => {
+                            e.preventDefault();
+                            const id = item.getAttribute("data-id");
+
+                            const data = await fetch(`/api/product/${id}`);
+                            const product = await data.json();
+
+                            const html = `
+                                <div class="productInfo-thumb">
+                                    <img src= ${product.image_url} alt="" srcset="">
+                                </div>
+                                <div class="productDetail-content">
+                                    <div class="productDetail-header">
+                                    <h1>${product.title}</h1>
+                                    <span class="product-soldout">Tình trạng :</span>
+                                    <p class="${product.sold_out ? "sold-out" : "stocking"}">${product.sold_out ? "Hết hàng" : "Còn hàng"}</p>
+                                    </div>
+                                    <div class="productDetail-inner">
+                                    <div class="productInner-wrapper">
+                                        <div class="productDetail-price">
+                                        <span>Giá:</span>
+                                        <p>${product.price}</p>
+                                        <div class="${product.discount === "" ? "" : "productDetail-discount"}">
+                                            <h3>${product.discount === "" ? "" : product.discount}</h3>
+                                        </div>
+                                        </div>
+                                        <form action="/add-to-cart/${product._id}" method="post" class="productDetail-actions">
+                                        <div class="addcart-area">
+                                            <div class="buy-now">
+                                            <form action="/add-to-cart/${product._id}" method="POST" class="add-form">
+                                                <input name="cart" hidden>
+                                                <button type="submit">mua ngay</button>
+                                            </form>
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="productInfo-close">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
+                            `;
+                                productInfo.innerHTML = html;
+                                productWrapper.style.position = "fixed";
+                                productWrapper.style.opacity = "1";
+                                const closeModal = document.querySelector(".productInfo-close");
+                                if(closeModal){
+                                    closeModal.addEventListener("click",() => {
+                                        productWrapper.style.position = "relative";
+                                        productWrapper.style.opacity = "0";
+                                    });
+                                }
+                            })
+                        })
+                    }
+
+                    const quantityProduct = document.querySelector(".quantity-product").getAttribute("data-qty");
+                    if(skip >= quantityProduct){
+                        loadMore.style.display = "none";
+                    }
                 })
                 .catch(error => console.error('Error fetching products:', error));
+
+
         });
