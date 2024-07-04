@@ -21,6 +21,7 @@ const totalPriceProduct = document.querySelectorAll(".total-price-product");
 const showProduct = document.querySelectorAll(".show-product");
 const productInfo = document.querySelector(".productInfo-inner");
 const productWrapper = document.querySelector(".product-info-wrapper");
+const buttonsAddToCart = document.querySelectorAll(".product-action-inner");
 
 const Max_Quantity = 10;
 const Min_Quantity = 1;
@@ -56,15 +57,15 @@ if (quantityInput) {
       if (valueInp < Max_Quantity) valueInp++;
       quantityInput.setAttribute("value", valueInp);
     });
-  })
+  });
 
-  minusBtn.forEach(btn => {
+  minusBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
       let valueInp = quantityInput.getAttribute("value");
       if (valueInp > Min_Quantity) valueInp--;
       quantityInput.setAttribute("value", valueInp);
     });
-  })
+  });
 }
 
 openLive.addEventListener("click", () => {
@@ -106,7 +107,7 @@ if (logoutBtn) {
 if (addToCart) {
   addToCart.addEventListener("click", function () {
     const quantity = document.querySelector(".quantity").value;
-    
+
     const form = document.querySelector(".productDetail-actions");
     const action = form.getAttribute("action");
     form.setAttribute("action", `${action}?quantity=${quantity}`);
@@ -136,6 +137,7 @@ if (totalPriceProduct) {
 if (searchInp) {
   const searchResult = document.querySelector(".search-result");
   const searchSuggest = document.querySelector(".search-suggest");
+  const searchTitle = document.querySelector(".search-title");
   let timeoutId;
   function debounce(func, delay) {
     clearTimeout(timeoutId);
@@ -146,24 +148,24 @@ if (searchInp) {
   });
   searchInp.addEventListener("focus", (e) => {
     e.stopPropagation();
+
+    searchResult.style.display = "block";
     setTimeout(() => {
-      searchResult.style.display = "block";
-    }, 200);
+      searchTitle.classList.add("title-show");
+    }, 100);
   });
   searchResult.addEventListener("click", (e) => {
     e.stopPropagation();
   });
   document.addEventListener("click", () => {
     searchResult.style.display = "none";
+    searchTitle.classList.remove("title-show");
   });
   searchInp.addEventListener("input", async (e) => {
     let value = "";
     debounce(async () => {
       let inputValue = e.target.value;
       value = inputValue;
-      while (searchSuggest.firstChild) {
-        searchSuggest.removeChild(searchSuggest.firstChild);
-      }
       try {
         const res = await fetch("/api/suggest-product", {
           method: "POST",
@@ -174,8 +176,8 @@ if (searchInp) {
         });
         const product = await res.json();
 
-        product.map((item) => {
-          const html = `
+        const result = product.map((item) => {
+          return `
               
               <div class="search-item">
                   <div class="search-info"> 
@@ -189,26 +191,25 @@ if (searchInp) {
                   </div> 
               </div>
           `;
-
-          searchSuggest.insertAdjacentHTML("beforeend", html);
         });
+
+        searchSuggest.innerHTML = result.join("");
       } catch (err) {
         console.log(err);
       }
-    }, 800);
+    }, 500);
   });
 }
 
-if(showProduct){
-  
-  showProduct.forEach(item => {
-    item.addEventListener("click",async(e) => {
+if (showProduct) {
+  showProduct.forEach((item) => {
+    item.addEventListener("click", async (e) => {
       e.preventDefault();
       const id = item.getAttribute("data-id");
-      
+
       const data = await fetch(`/api/product/${id}`);
       const product = await data.json();
-      
+
       const html = `
               <div class="productInfo-thumb">
                 <img src= ${product.image_url} alt="" srcset="">
@@ -245,31 +246,34 @@ if(showProduct){
                 <i class="fa-solid fa-xmark"></i>
               </div>
       `;
-        productInfo.innerHTML = html;
-        productWrapper.style.position = "fixed";
-        productWrapper.style.opacity = "1";
-        const closeModal = document.querySelector(".productInfo-close");
-        if(closeModal){
-   
-          closeModal.addEventListener("click",() => {
-            productWrapper.style.position = "relative";
-            productWrapper.style.opacity = "0";
-          })
-        
-          
-        }
-    })
-  })
+      productInfo.innerHTML = html;
+      productWrapper.style.position = "fixed";
+      productWrapper.style.opacity = "1";
+      const closeModal = document.querySelector(".productInfo-close");
+      if (closeModal) {
+        closeModal.addEventListener("click", () => {
+          productWrapper.style.position = "relative";
+          productWrapper.style.opacity = "0";
+        });
+      }
+    });
+  });
 }
 
-if(productWrapper){
-  productWrapper.addEventListener("click",() => {
+if (productWrapper) {
+  productWrapper.addEventListener("click", () => {
     productWrapper.style.position = "relative";
     productWrapper.style.opacity = "0";
-  })
+  });
   productInfo.addEventListener("click", (e) => {
     e.stopPropagation();
-  })
+  });
 }
 
-
+if (buttonsAddToCart) {
+  buttonsAddToCart.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      item.style.pointerEvents = "none";
+    });
+  });
+}

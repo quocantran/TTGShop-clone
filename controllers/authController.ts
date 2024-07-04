@@ -142,12 +142,23 @@ export default {
 
   verifyOtp: async (req: Request, res: Response) => {
     const validOtp = await ForgotPassword.findOne({ otp: req.body.otp });
+
     if (!validOtp) {
       res.render("client/pages/reset/index.pug", {
         error: "Mã OTP không chính xác!",
       });
       return;
     }
+
+    const user = await User.findOne({ email: validOtp.email });
+
+    if (!user) {
+      res.render("client/pages/reset/index.pug", {
+        error: "Email không tồn tại!",
+      });
+      return;
+    }
+
     res.redirect(`/reset-password/reset/${validOtp._id}`);
   },
 

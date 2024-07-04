@@ -4,6 +4,7 @@ venv/
 .env
 lib/
 lib64/
+dist
 
 *.log
 *.sqlite

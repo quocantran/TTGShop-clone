@@ -139,6 +139,22 @@ html {
   max-width: 605px;
 }
 
+.search-title {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.search-title.title-show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.35s 0.4s,
+    visibility 0.35s 0.4s,
+    transform 0.25s ease 0.35s;
+}
+
 .search-info p {
   line-height: 15px;
   font-size: 12px;
@@ -859,7 +875,6 @@ html {
 .product-action {
   padding: 10px 14px;
   transition: transform 300ms ease;
-  cursor: pointer;
 }
 
 .product-action-inner {
