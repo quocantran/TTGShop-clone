@@ -22,6 +22,7 @@ const showProduct = document.querySelectorAll(".show-product");
 const productInfo = document.querySelector(".productInfo-inner");
 const productWrapper = document.querySelector(".product-info-wrapper");
 const buttonsAddToCart = document.querySelectorAll(".product-action-inner");
+const buyNowBtn = document.querySelector(".buy-now");
 
 const Max_Quantity = 10;
 const Min_Quantity = 1;
@@ -106,6 +107,7 @@ if (logoutBtn) {
 
 if (addToCart) {
   addToCart.addEventListener("click", function () {
+    this.style.pointerEvents = "none";
     const quantity = document.querySelector(".quantity").value;
 
     const form = document.querySelector(".productDetail-actions");
@@ -113,6 +115,12 @@ if (addToCart) {
     form.setAttribute("action", `${action}?quantity=${quantity}`);
 
     form.submit();
+  });
+}
+
+if (buyNowBtn) {
+  buyNowBtn.addEventListener("click", function () {
+    this.style.pointerEvents = "none";
   });
 }
 
