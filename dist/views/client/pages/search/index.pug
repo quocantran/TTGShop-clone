@@ -1,0 +1,53 @@
+extends ../../layout/default.pug
+include ../../mixins/card.pug
+include ../../mixins/alertCart
+block main
+
+    if messages.addSuccess
+        +alertCart(cartData)
+
+    .searchPage-wrapper 
+        .searchPage-container   
+            .heading-search 
+                h1 Tìm kiếm
+                p.sub-txt 
+                    |Có 
+                    strong #{totalProduct} sản phẩm 
+                    |cho tìm kiếm
+            -if(totalProduct > 0)
+                .search-content 
+                    .search-inner 
+                        p.subtext-result Kết quả tìm kiếm cho 
+                            strong "#{keyword}"
+                            |. 
+                        .search-list
+                            each item of products 
+                                +card(item)
+                .pagination-shop 
+                    .pagination-container 
+                        ul.pagination
+                            if(currentPage > 1) 
+                                li
+                                    a(href=`/search?keyword=${keyword}&page=${currentPage - 1}`)
+                                        <i class="fa-solid fa-angles-left"></i> 
+                            -for(let i=1;i<=totalPage;i++)
+                                -if(i === currentPage)
+                                    li
+                                        span #{i}
+                                -else if(i === 1 || i === totalPage || (i >= currentPage - 1 && i <= currentPage + 1))
+                                    li
+                                        a(href=`/search?keyword=${keyword}&page=${i}`)  #{i}
+                                -else if ((i === currentPage + 2 || i === currentPage - 2))
+                                    li 
+                                        p ...
+                                -else if(i == currentPage)
+                                    li
+                                        a(href=`/search?keyword=${keyword}&page=${i}`)  #{i}
+                            if(currentPage < totalPage)
+                                li
+                                    a(href=`/search?keyword=${keyword}&page=${currentPage+1}`) 
+                                        <i class="fa-solid fa-angles-right"></i>
+            -else
+                .expanded-message 
+                    h2 Không tìm thấy nội dung bạn yêu cầu
+                    span Vui lòng kiểm tra chính tả, sử dụng các từ tổng quát hơn và thử lại!

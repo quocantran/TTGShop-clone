@@ -1,0 +1,33 @@
+
+mixin arrow(target)
+    .heading-1-right 
+        button(class="arrow-left" data-target=target)
+            i(class="fa-solid fa-arrow-left")
+        button(class="arrow-right" data-target=target)
+            i(class="fa-solid fa-arrow-right")
+    script.
+        document.addEventListener('DOMContentLoaded', function() {
+            const countProduct = document.querySelector(".product-2-loop").querySelectorAll(".product-loop").length;
+            const card = document.querySelectorAll(".product-loop")[0];
+            const widthCard = Math.floor(card.clientWidth);
+
+            const maxTranslate = (parseInt(countProduct) - 5) * -widthCard;
+            const minTranslate = 0;
+            const arrowButtons = document.querySelectorAll(".arrow-left, .arrow-right");
+
+            arrowButtons.forEach(button => {
+                button.addEventListener("click", (event) => {
+                    const target = event.currentTarget.getAttribute("data-target");
+                    const targetElement = document.querySelector(`.${target}`);
+                    let translateX = parseInt(targetElement.style.transform.split("(")[1]) || 0;
+
+                    if (button.classList.contains("arrow-left") && translateX < minTranslate) {
+                        translateX += Math.floor(widthCard*2 / arrowButtons.length);
+                        targetElement.style.transform = `translateX(${translateX}px)`;
+                    } else if (button.classList.contains("arrow-right") && translateX > maxTranslate) {
+                        translateX -= Math.floor(widthCard*2 / arrowButtons.length);
+                        targetElement.style.transform = `translateX(${translateX}px)`;
+                    }
+                });
+            });
+        });

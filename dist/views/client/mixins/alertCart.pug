@@ -1,0 +1,12 @@
+mixin alertCart(data)
+    .cart-message 
+        .message-container 
+            .cartMessage-header
+                p Đã thêm vào giỏ hàng thành công!
+                button(class="message-close") "×"
+            .cartMessage-content 
+                img(src=data.image_url, alt="", srcset="")
+                .cartMessage-detail 
+                    a(href=`/products/${data.slug}`) #{data.title}
+                    ins #{data.price}  
+
